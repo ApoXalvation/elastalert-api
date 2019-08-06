@@ -62,6 +62,7 @@ tolerations: []
 extraVolumes: []
 
 extraVolumeMounts: []
-
+# wrokaround issue https://github.com/Yelp/elastalert/issues/2204
 command: ['sh', '-c', 'apk add py2-pip && pip install elasticsearch==6.3.1 &&  npm start']
+# Uncomment below for debug
 #command: ['sh', '-c', 'sleep 2000']

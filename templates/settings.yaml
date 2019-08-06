@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "elastalert.fullname" . }}-settings
+  labels:
+    app: {{ template "elastalert.name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+data:
+  config.json: |
+    {"appName": "{{ .Values.settings.appName }}","port": {{ .Values.settings.port }},"wsport": {{ .Values.settings.wsport }},"elastalertPath": "{{ .Values.settings.elastalertPath }}",{{- if .Values.settings.start }}"start": "{{ .Values.settings.start }}",{{- end }}{{- if .Values.settings.end }}"end": "{{ .Values.settings.end }}",{{- end }}"verbose": {{ .Values.settings.verbose }},"es_debug": {{ .Values.settings.es_debug }},"debug": {{ .Values.settings.debug }},{{- if .Values.settings.rulesPath.path }}"rulesPath": { "relative": {{ .Values.settings.rulesPath.relative }},"path": "{{ .Values.settings.rulesPath.path }}" },{{- end }}{{- if .Values.settings.templatesPath.path }}"templatesPath": { "relative": {{ .Values.settings.templatesPath.relative }}, "path": "{{ .Values.settings.templatesPath.path }}" },{{- end }}{{- if .Values.settings.dataPath.path }}"dataPath": { "relative": {{ .Values.settings.dataPath.relative }}, "path": "{{ .Values.settings.dataPath.path }}" },{{- end }} "es_host": "{{ .Values.settings.es_host }}", "es_port": {{ .Values.settings.es_port }}, "writeback_index": "{{ .Values.settings.writeback_index }}" }
+

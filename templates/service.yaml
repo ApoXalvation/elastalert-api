@@ -1,0 +1,26 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: {{ template "elastalert.name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+  name: {{ template "elastalert.fullname" . }}
+{{- if .Values.serviceAnnotations }}
+  annotations:
+{{ toYaml .Values.serviceAnnotations | indent 4 }}
+{{- end }}
+
+spec:
+  ports:
+    - name: api
+      port: {{ .Values.settings.port }}
+      targetPort: api
+    - name: wss
+      port: {{ .Values.settings.wsport }}
+      targetPort: wss
+  selector:
+    app: {{ template "elastalert.name" . }}
+    release: {{ .Release.Name }}
+  type: ClusterIP

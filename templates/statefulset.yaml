@@ -1,0 +1,100 @@
+{{ if .Values.elasticsearch.host }}
+apiVersion: apps/v1beta1
+kind: StatefulSet
+metadata:
+  name: {{ template "elastalert.fullname" . }}
+  labels:
+    app: {{ template "elastalert.name" . }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  revisionHistoryLimit: {{ .Values.revisionHistoryLimit }}
+  template:
+    metadata:
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/config.yaml") . | sha256sum }}
+        checksum/rules: {{ include (print $.Template.BasePath "/rules.yaml") . | sha256sum }}
+      labels:
+        name: {{ template "elastalert.fullname" . }}-elastalert
+        app: {{ template "elastalert.name" . }}
+        release: {{ .Release.Name }}
+    spec:
+      containers:
+      - name: elastalert
+        ports:
+        - containerPort: {{ .Values.settings.port }}
+          name: api
+          protocol: TCP
+        - containerPort: {{ .Values.settings.wsport }}
+          name: wss
+          protocol: TCP
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+{{- if .Values.command }}
+        command:
+{{ toYaml .Values.command | indent 10 }}
+{{- end }}
+{{- if .Values.args }}
+        args:
+{{ toYaml .Values.args | indent 10 }}
+{{- end }}
+        volumeMounts:
+          - name: config
+            mountPath: '/opt/elastalert/config.yaml'
+            subPath: config.yaml
+          - name: settings
+            mountPath: '/opt/elastalert-server/config/config.json'
+            subPath: config.json
+          - mountPath: /rules
+            name: rules
+{{- if .Values.elasticsearch.certsVolumeMounts }}
+{{ toYaml .Values.elasticsearch.certsVolumeMounts | indent 10 }}
+{{- end }}
+{{- if .Values.extraVolumeMounts }}
+{{ toYaml .Values.extraVolumeMounts | indent 10 }}
+{{- end }}
+        resources:
+{{ toYaml .Values.resources | indent 12 }}
+      restartPolicy: Always
+{{- if .Values.tolerations }}
+      tolerations:
+{{ toYaml .Values.tolerations | indent 8 }}
+{{- end }}
+{{- if .Values.nodeSelector }}
+      nodeSelector:
+{{ toYaml .Values.nodeSelector | indent 8 }}
+{{- end }}
+      securityContext:
+        fsGroup: 1000
+      volumes:
+        - name: config
+          configMap:
+            name: {{ template "elastalert.fullname" . }}-config
+            defaultMode: 0666
+            readOnly: false
+        - name: settings
+          configMap:
+            name: {{ template "elastalert.fullname" . }}-settings
+            defaultMode: 0666
+            readOnly: false
+{{- if .Values.elasticsearch.certsVolumes }}
+{{ toYaml .Values.elasticsearch.certsVolumes | indent 8 }}
+{{- end }}
+  volumeClaimTemplates:
+  - metadata:
+      name: rules
+    spec:
+      accessModes:
+        - ReadWriteOnce
+      resources:
+        requests:
+          storage: {{ .Values.persistence.size | quote }}
+{{- if .Values.persistence.storageClass }}
+      storageClassName: "{{ .Values.persistence.storageClass }}"
+{{- end }}
+{{if .Values.extraVolumes }}
+{{ toYaml .Values.extraVolumes | indent 8 }}
+{{- end }} 
+{{- end }}

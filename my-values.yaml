@@ -1,0 +1,67 @@
+replicaCount: 1
+
+revisionHistoryLimit: 5
+
+runIntervalMins: 1
+
+bufferTimeMins: 15
+
+alertRetryLimitMins: 2880
+
+realertIntervalMins: ""
+
+writebackIndex: elastalert_status
+
+image:
+  repository: bitsensor/elastalert 
+  tag: 2.0.1
+  pullPolicy: IfNotPresent
+resources: {}
+
+persistence:
+  size: 5Gi
+
+settings:
+  appName: "elastalert-server"
+  port: 3030
+  wsport: 3333
+  start: ""
+  end: ""
+  dataPath:
+    path: ""
+  elastalertPath: "/opt/elastalert" 
+  verbose: false
+  es_debug: false
+  debug: false
+  rulesPath: 
+    relative: true
+    path: "/rules" 
+  templatesPath: 
+    relative: true
+    path: "/rule_templates" 
+  es_host: "elk-elasticsearch-client"
+  es_port: 9200
+  writeback_index: "elastalert_status" 
+
+elasticsearch:
+  host: "elk-elasticsearch-client"
+  port: 9200
+  useSsl: "False"
+  username: ""
+  password: ""
+  verifyCerts: "True"
+
+extraConfigOptions: {}
+
+
+rules: {}
+
+nodeSelector: {}
+tolerations: []
+
+extraVolumes: []
+
+extraVolumeMounts: []
+
+command: ['sh', '-c', 'apk add py2-pip && pip install elasticsearch==6.3.1 &&  npm start']
+#command: ['sh', '-c', 'sleep 2000']

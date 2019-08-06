@@ -27,5 +27,7 @@ kibana:
 ```
 Installation: 
 `helm install --debug --namespace logging -n elk stable/elastic-stack -f ./elastalert-api/elast-stack.yaml`
+
 `git clone https://github.com/ApoXalvation/elastalert-api.git`
+
 `helm install --debug --namespace logging -n ela ./elastalert-api -f ./elastalert-api/my-values.yaml`

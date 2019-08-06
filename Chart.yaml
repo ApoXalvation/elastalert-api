@@ -7,6 +7,7 @@ home: https://github.com/apoxalvation/elastalert
 icon: https://static-www.elastic.co/assets/blteb1c97719574938d/logo-elastic-elasticsearch-lt.svg
 sources:
 - https://github.com/bitsensor/elastalert
+- https://github.com/Yelp/elastalert
 maintainers:
   - name: Apoc
     email: dawid@prus.pro

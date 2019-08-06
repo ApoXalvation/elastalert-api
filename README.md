@@ -1,4 +1,4 @@
-minimum kibana config:
+below minimum kibana config should be applied to variables of https://github.com/helm/charts/tree/master/stable/elastic-stack :
 
 ```yaml
 kibana:
@@ -12,12 +12,15 @@ kibana:
     reset: false
     # Use <plugin_name,version,url> to add/upgrade plugin
     values:
+    # This version should work with elastic-stack
       - elastalert-kibana-plugin,1.0.3,https://github.com/bitsensor/elastalert-kibana-plugin/releases/download/1.0.3/elastalert-kibana-plugin-1.0.3-6.7.0.zip
+  # Overwrite kibana config file with elastalert-api server address
   files:
     kibana.yml:
       elastalert-kibana-plugin:
         serverHost: ela-elastalert-api
         serverPort: 3030
+      # Default kibana config file content from docker immage
       elasticsearch.hosts: http://elasticsearch:9200
       server.host: "0"
       server.name: kibana

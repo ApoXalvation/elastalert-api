@@ -1,4 +1,4 @@
-below minimum kibana config should be applied to variables of https://github.com/helm/charts/tree/master/stable/elastic-stack :
+below minimum kibana config should be applied to values of https://github.com/helm/charts/tree/master/stable/elastic-stack :
 
 ```yaml
 kibana:

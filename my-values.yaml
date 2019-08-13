@@ -34,10 +34,10 @@ settings:
   es_debug: false
   debug: false
   rulesPath: 
-    relative: true
+    relative: false
     path: "/rules" 
   templatesPath: 
-    relative: true
+    relative: false
     path: "/rule_templates" 
   es_host: "elk-elasticsearch-client"
   es_port: 9200

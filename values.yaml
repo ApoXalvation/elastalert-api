@@ -58,13 +58,13 @@ settings:
   # The path to the rules folder containing all the rules. If the folder is empty a dummy file will be created to allow ElastAlert to start.
   rulesPath: 
   # Whether to use a path relative to the `elastalertPath` folder.
-    relative: true
+    relative: false
   # The path to the rules folder. 
     path: "/rules" 
   # The path to the rules folder containing all the rule templates. If the folder is empty a dummy file will be created to allow ElastAlert to start.
   templatesPath: 
   # Whether to use a path relative to the `elastalertPath` folder.
-    relative: true
+    relative: false
   # The path to the rule templates folder.
     path: "/rule_templates" 
   # The path to a folder that the server can use to store data and temporary files.
